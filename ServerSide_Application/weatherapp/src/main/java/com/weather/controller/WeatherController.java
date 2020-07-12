@@ -1,7 +1,9 @@
 package com.weather.controller;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.weather.entity.Weather;
+import com.weather.models.WeatherRequest;
+import com.weather.models.WeatherResponse;
 import com.weather.service.WeatherService;
 
 
@@ -47,35 +51,27 @@ public class WeatherController {
 
 	@PostMapping(path="/weather")
 	public ResponseEntity<?> newWeatherData(
-			@RequestBody() Weather weather){
-		// add new weather data
-		
-		// weather with same id return 400
+			@RequestBody() WeatherRequest weather){
+		ZoneId defaultZoneId = ZoneId.systemDefault();	
 		System.out.println(weather);
-		weatherService.newWeatherData(weather);
-		
+//		 weatherService.newWeatherData(weather);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping(path="/weather")
-	public ResponseEntity<ArrayList<Weather>> getWeatherData(
+	public ResponseEntity<List<WeatherResponse>> getWeatherData(
 			@RequestParam(name = "date", required=false) @DateTimeFormat(pattern="yyyy-MM-dd") Date date,
-			@RequestParam(name = "lat", defaultValue = "0") float latitude,
-			@RequestParam(name = "lon",defaultValue = "0") float longitude
+			@RequestParam(name = "lat", defaultValue = "0") Double latitude,
+			@RequestParam(name = "lon",defaultValue = "0") Double longitude
 			) {
-		
 //		System.out.println("date : " + date);
 		// if date is null (get all the weather data) array sorted ascending order
 		// if we have date == return all dates with the weather date. if it doesn't exist http response 404
 		// if we have lat and lon == return weather data filter by coordinates.  if request location does not exit return 404 
 //		ArrayList<Weather> allweather = new ArrayList<Weather>();
-		weatherService.getWeatherData(date, 0 , 0);
+		List<WeatherResponse> data = weatherService.getWeatherData(date, latitude , longitude);
 		
-		
-		System.out.println("date :"+ date+
-							" || lat :"+ latitude+
-							" || lon :"+ longitude);
-		return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<Weather>());
+		return ResponseEntity.status(HttpStatus.OK).body(data);
 	}
 	
 	

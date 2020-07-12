@@ -18,11 +18,15 @@ import com.weather.entity.Weather;
  * */
 public interface WeatherRepository extends JpaRepository< Weather, Long> {
 
-		@Query("SELECT w FROM Weather w WHERE w.date = :finddate")
-		List<Weather> getAllWithDate(@Param("finddate") Date date);
+		@Query("SELECT w FROM Weather w WHERE w.date = :date")
+		List<Weather> getAllWithDate(@Param("date") Date date);
 		
-		@Query("SELECT w FROM Weather w WHERE w.location.lon = :findlon")
-		List<Weather> getAllWithLocation(@Param("findlon") float lon);
-//		@Query("SELECT w FROM Weather w WHERE w.id = :idfind")
-//		List<Weather> getAllWithId(@Param("idfind") long id);
+		@Query("SELECT w FROM Weather w WHERE w.location.lon <= :findlon")
+		List<Weather> getAllWithLocationLong(@Param("findlon") Double lon);
+		
+		@Query("SELECT w FROM Weather w WHERE w.location.city = :city")
+		List<Weather> getAllWithLocationCity(@Param("city") String city);
+		
+		@Query("SELECT w FROM Weather w WHERE w.id = :idfind")
+		List<Weather> getAllWithId(@Param("idfind") long id);
 }
