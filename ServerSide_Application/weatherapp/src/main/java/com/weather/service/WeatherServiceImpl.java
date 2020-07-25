@@ -41,9 +41,16 @@ public class WeatherServiceImpl  implements WeatherService{
 	}
 	
 	@Override
-	public Weather eraseAllWeatherData() {
-		return null;
+	public void eraseAllWeatherData() {
+		weatherRepository.deleteAll();
 	}
+	@Override
+	public void eraseConditionWeather(Date start, Date end, Double lon, Double lat) {
+		// TODO Auto-generated method stub
+//	    weatherRepository.deleteConditionalFields(start, end);
+	}
+
+	
 
 	@Override
 	public Weather newWeatherData(WeatherRequest weatherdto) {
@@ -57,6 +64,7 @@ public class WeatherServiceImpl  implements WeatherService{
 		Weather weather = new Weather(weatherdto);
 		weather.setDate(date);
 		weatherRepository.save(weather);
+		weatherRepository.flush();
 		return null;
 	}
 
@@ -65,30 +73,23 @@ public class WeatherServiceImpl  implements WeatherService{
 		List<WeatherResponse> collectedData = new ArrayList<WeatherResponse>();
 //		DecimalFormat decimal = new DecimalFormat("#.0000");	
 		// TODO search by date, one-to-one, 
-		System.out.println("by date");
-		
-		 
-//		collectedData = 
-//		collectedData.addAll(	weatherRepository.getAllWithDate(date) );
-		weatherRepository.getAllWithDate(date).forEach(
-		weather -> {
-//			System.out.println(weather);
-			collectedData.add(new WeatherResponse(weather));
-	
-		});
-		
-		
-		
-//		System.out.println(	weatherRepository.getAllWithDate(date));//.stream().map(weather ->weather).collect(Collectors.toList());
-		// need to be able to search the one to one mapping 
-//		System.out.println("longitude");
-//		System.out.println(decimal.format(longitude));
-//		System.out.println( weatherRepository.getAllWithLocationLong( longitude ) );
-//		System.out.println("city");
-//		List<Weather> weather = weatherRepository.getAllWithLocationCity("kingston");
-//		System.out.println(weather.get(0).getLocation().getState());
+//		System.out.println("by date");
+//		System.out.println(date);
+		 if(date == null || latitude <= -91 || longitude <= -180) {
+			 weatherRepository.findAll().forEach(
+					 	weather ->{
+					 		collectedData.add(new WeatherResponse(weather));
+					 	}
+			);
+		 }else {
+				weatherRepository.getAllWithDate(date).forEach(
+						weather -> {
+							collectedData.add(new WeatherResponse(weather));
+						}); 
+		 }
 		return collectedData;
 	}
 
+	
 
 }

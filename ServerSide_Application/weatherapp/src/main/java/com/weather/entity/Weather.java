@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.weather.entity.Location;
 import com.weather.models.WeatherRequest;
 
 import lombok.AccessLevel;

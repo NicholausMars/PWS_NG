@@ -9,7 +9,8 @@ import com.weather.models.WeatherRequest;
 import com.weather.models.WeatherResponse;
 
 public interface WeatherService {
-	Weather eraseAllWeatherData();
+	void eraseAllWeatherData();
+	void eraseConditionWeather(Date start, Date end, Double lon, Double lat);
 	Weather newWeatherData(WeatherRequest weather);
 	List<WeatherResponse> getWeatherData(Date date, Double latitude, Double longitude);
 }

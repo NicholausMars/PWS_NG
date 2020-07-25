@@ -29,4 +29,18 @@ public interface WeatherRepository extends JpaRepository< Weather, Long> {
 		
 		@Query("SELECT w FROM Weather w WHERE w.id = :idfind")
 		List<Weather> getAllWithId(@Param("idfind") long id);
+
+		@Query("DELETE FROM Weather w  WHERE w.date BETWEEN :start AND :end"
+//				+ "join Location l  on w.id = l.id"
+				)
+//				+ " WHERE w.date BETWEEN :start  AND  :end AND l.lat = :lat AND l.lon = :lon")
+		void deleteConditionalFields(
+				@Param("start") Date start,
+				@Param("end") Date end//,
+//				@Param("lon") Double lon,
+//				@Param("lat") Double lat
+				
+				);
+//		@Query("DELETE FROM Weather")
+//		void deleteAll();
 }
